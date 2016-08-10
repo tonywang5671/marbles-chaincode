@@ -41,6 +41,7 @@ type Marble struct{
 	Color string `json:"color"`
 	Size int `json:"size"`
 	User string `json:"user"`
+	Comments string `json:"comments"`
 }
 
 // ============================================================================================================================
@@ -211,9 +212,9 @@ func (t *SimpleChaincode) Write(stub *shim.ChaincodeStub, args []string) ([]byte
 func (t *SimpleChaincode) init_marble(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var err error
 
-	//   0       1       2     3
-	// "asdf", "blue", "35", "bob"
-	if len(args) != 4 {
+	//   0       1       2     3     4
+	// "asdf", "blue", "35", "bob", "comments"
+	if len(args) != 5 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 
@@ -230,6 +231,9 @@ func (t *SimpleChaincode) init_marble(stub *shim.ChaincodeStub, args []string) (
 	if len(args[3]) <= 0 {
 		return nil, errors.New("4th argument must be a non-empty string")
 	}
+	if len(args[4]) <= 0 {
+		return nil, errors.New("5th argument must be a non-empty string")
+	}
 	
 	size, err := strconv.Atoi(args[2])
 	if err != nil {
@@ -238,8 +242,9 @@ func (t *SimpleChaincode) init_marble(stub *shim.ChaincodeStub, args []string) (
 	
 	color := strings.ToLower(args[1])
 	user := strings.ToLower(args[3])
+	comments := strings.ToLower(args[4])
 
-	str := `{"name": "` + args[0] + `", "color": "` + color + `", "size": ` + strconv.Itoa(size) + `, "user": "` + user + `"}`
+	str := `{"name": "` + args[0] + `", "color": "` + color + `", "size": ` + strconv.Itoa(size) + `, "user": "` + user + `", "comments": "` + comments + `"}`
 	err = stub.PutState(args[0], []byte(str))								//store marble with id as key
 	if err != nil {
 		return nil, err
