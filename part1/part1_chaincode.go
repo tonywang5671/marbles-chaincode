@@ -244,10 +244,9 @@ func (t *SimpleChaincode) init_marble(stub *shim.ChaincodeStub, args []string) (
 	user := strings.ToLower(args[3])
 	
 
-	str := `{"name": "` + args[0] + `", "color": "` + color + `", "size": ` + strconv.Itoa(size) + `, "user": "` + user + `", "comments": "` + args[4] + `"}`
+	str := `{"name": "` + args[0] + `", "color": "` + color + `", "size": ` + strconv.Itoa(size) + `, "user": "` + user + `", "comments": "` + args[4]`"}`
 	
-	return nil, errors.New("5th argument...."+args[4])
-	
+		
 	err = stub.PutState(args[0], []byte(str))								//store marble with id as key
 	if err != nil {
 		return nil, err
